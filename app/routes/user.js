@@ -31,8 +31,7 @@ app.get(
     '/logout',
     //passport.authenticate('jwt', {session: false}),
     function (req, res) {
-        console.log(' logout 진입 ')
-        //UserService().logout(req, res)
+        UserService().logout(req, res)
         //req.logout();
         res.json({message: 'ok'});
     }

@@ -49,7 +49,7 @@ export default function UserService() {
         },
         login(req, res) {
             User.findOne({
-                userid: req.body.userid
+                email: req.body.email
             }, function (err, user) {
                 if (err) 
                     throw err
@@ -111,9 +111,9 @@ export default function UserService() {
             res.json({success: true, msg: '로그아웃'});
 
         },
-        checkDuplicateUserid(req, res) {
+        checkDuplicateEmail(req, res) {
             User
-                .findById({userid: req.body.userid})
+                .findById({email: req.body.email})
                 .exec((err, user) => {
                     if (err) {
                         res
@@ -124,14 +124,14 @@ export default function UserService() {
                     if (user) {
                         res
                             .status(400)
-                            .send({message: "ID가 이미 존재합니다"});
+                            .send({message: "같은 이메일이 이미 존재합니다"});
                         return;
                     }
                 })
         },
-        getUserById(userid){
+        getUserByEmail(email){
             User
-                .findById({userid: userid})
+                .findById({email: email})
                 .exec((_err, user) => {
                     return user
                 })

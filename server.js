@@ -3,7 +3,6 @@ import express from 'express'
 import passport from 'passport'
 import morgan from 'morgan'
 import db from './app/models/index.js'
-import api from "./app/routes/api.js"
 import user from "./app/routes/user.js"
 import index from "./app/routes/index.js"
 import getResponse from "./app/lambdas/getResponse.js"
@@ -19,7 +18,6 @@ async function startServer() {
     const _passport = applyPassport(passport, jwtSecret);
     app.use(_passport.initialize());
     app.use("/", index);
-    app.use("/api", api);
     app.use("/user", user);
     app.use(morgan('dev'))
     db
