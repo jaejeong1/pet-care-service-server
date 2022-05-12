@@ -1,6 +1,6 @@
-import db from '../modles/index.js'
+import db from '../models/index.js'
 import getDatabase from '../lambdas/getDatabase.js'
-import { http } from 'winston'
+import getToken from '../lambdas/getToken.js'
 import request from 'request'
 
 export default function SceneService() {
@@ -8,14 +8,19 @@ export default function SceneService() {
     const Scene = db.Scene
     const dbo = getDatabase()
     const dbConnect = dbo.getDb()
-    const clientToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImFpc3R1ZGlvcy5jb20iLCJwbGF0Zm9ybSI6IndlYiIsImlhdCI6MTY1MjI3OTM0MCwiZXhwIjoxNjUyMjc5NjQwfQ.kn8LTgw_vTtOGxLM0oKRhcUDTio3wUnC2zn95iwM0s8"
     const appId = "aistudios.com"
-    const baseUrl = "https://dev.aistudios.com/api/odin/editor/scene"
+    const clientHostName = "aistudios.com"
+    const baseUrl = "https://dev.aistudios.com/api/odin"
+    const token = getToken().token()
 
     return {
+        getToken() {
+            console.log(token)
+        },
         add(req, res) {
+            // console.log(token)
             // 1. Scene 추가
-            request.post(baseUrl + "/key", {form:{screenIdx:req.body.index, scene:req.body.context}}, function(err, httpResponse, body) {
+            request.post(baseUrl + "/editor/scene/key", {form:{screenIdx:req.body.index, scene:req.body.context}}, function(err, httpResponse, body) {
                 res
                     .status(500)
                     .send({message: err});
@@ -39,7 +44,7 @@ export default function SceneService() {
         },
         delete(req, res) {
             // 1. Scene 삭제
-            request.delete(baseUrl + "/key", {form:{screenIdx:req.body.index}}, function(err, httpResponse, body) {
+            request.delete(baseUrl + "/editor/scene/key", {form:{screenIdx:req.params.index}}, function(err, httpResponse, body) {
                 res
                     .status(500)
                     .send({message: err});
@@ -49,7 +54,7 @@ export default function SceneService() {
         },
         update(req, res) {
             // 1. Scene 변경
-            request.put(baseUrl + "/key", {form:{screenIdx:req.body.index, scene:req.body.context}}, function(err, httpResponse, body) {
+            request.put(baseUrl + "/editor/scene/key", {form:{screenIdx:req.body.index, scene:req.body.context}}, function(err, httpResponse, body) {
                 res
                     .status(500)
                     .send({message: err});

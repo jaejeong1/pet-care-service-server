@@ -4,6 +4,7 @@ import passport from 'passport'
 import morgan from 'morgan'
 import db from './app/models/index.js'
 import user from "./app/routes/user.js"
+import scene from "./app/routes/scene.js"
 import index from "./app/routes/index.js"
 import getResponse from "./app/lambdas/getResponse.js"
 import applyPassport from './app/lambdas/applyPassport.js'
@@ -19,6 +20,7 @@ async function startServer() {
     app.use(_passport.initialize());
     app.use("/", index);
     app.use("/user", user);
+    app.use("/scene", scene);
     app.use(morgan('dev'))
     db
         .mongoose
@@ -35,12 +37,12 @@ async function startServer() {
         });
     
     app.all("*", function(_req, res) {
-      return getResponse.notFoundResponse(res, "페이지를 찾을 수 없습니다");
+      return getResponse().notFoundResponse(res, "페이지를 찾을 수 없습니다");
     });
     
     app.use((err, _req, res) => {
       if(err.name == "UnauthorizedError"){
-        return getResponse.unauthorizedResponse(res, err.message);
+        return getResponse().unauthorizedResponse(res, err.message);
       }
     });
   

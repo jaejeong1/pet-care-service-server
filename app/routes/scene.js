@@ -17,15 +17,20 @@ app.use(function (_req, res, next) {
     next();
 });
 app.post('/', cors(corsOptions), (req, res) => {
-    SceneService.add(req, res)
+    SceneService().add(req, res)
     res.json({message: 'ok'})
 })
-app.delete('/', cors(corsOptions), (req, res) => {
-    SceneService.delete(req, res)
+app.delete('/:index', cors(corsOptions), (req, res) => {
+    SceneService().delete(req, res)
     res.json({message: 'ok'})
 })
 app.put('/', cors(corsOptions), (req, res) => {
-    SceneService.update(req, res)
+    SceneService().update(req, res)
     res.json({message: 'ok'})
+})
+app.get('/token', (req, res) => {
+    SceneService().getToken(res)
+    res.json({message: 'ok'});
+    // res.json({message: res})
 })
 export default app
